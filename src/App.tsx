@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import './App.css'
+import { AppRouter } from './routes/AppRouter'
+import { Layout } from 'antd'
+import { NavBar } from './components/NavBar/NavBar'
+import { useActions } from './hooks/useActions'
+import { IUser } from './models/IUser'
 
 function App() {
+
+  const {setAuth, setUser} = useActions()
+
+  useEffect(()=> {
+    if (localStorage.getItem('auth')){
+      setUser({username: localStorage.getItem('username' || '')} as IUser)
+      setAuth(true)
+    }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Layout>
+      <NavBar/>
+      <Layout.Content>
+        <AppRouter/>
+      </Layout.Content>
+    </Layout>
+  )
 }
 
-export default App;
+export default App
